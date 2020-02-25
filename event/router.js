@@ -5,7 +5,8 @@ const Sequelize = require("sequelize");
 const router = new Router();
 
 //create event
-router.post("/event", async (request, response, next) => {
+//need to add auth middleware
+router.post("/events", async (request, response, next) => {
   try {
     const newEvent = await Event.create(request.body);
     response.send(newEvent);
@@ -15,15 +16,15 @@ router.post("/event", async (request, response, next) => {
 });
 
 //get events that are not finished yet and nine events in a page
-router.get("/event", async (request, response, next) => {
+router.get("/events", async (request, response, next) => {
   try {
-    const limit = request.query.limit || 12;
+    const limit = request.query.limit || 9;
     const offset = request.query.offset || 0;
     console.log("current date", new Date());
     const events = await Event.findAll({
       limit,
       offset,
-      where: { date: { [Sequelize.Op.gte]: new Date() } }
+      where: { endDate: { [Sequelize.Op.gte]: new Date() } }
     });
     response.send(events);
   } catch (error) {
@@ -32,7 +33,7 @@ router.get("/event", async (request, response, next) => {
 });
 
 //edit event
-router.put("/event/:id", async (request, response, next) => {
+router.put("/events/:id", async (request, response, next) => {
   try {
     const eventId = parseInt(request.params.id);
     const event = await Event.findByPk(eventId);
@@ -48,7 +49,7 @@ router.put("/event/:id", async (request, response, next) => {
 });
 
 //delete event
-router.delete("/event/:id", async (request, response, next) => {
+router.delete("/events/:id", async (request, response, next) => {
   try {
     const eventId = parseInt(request.params.id);
     const event = await Event.findByPk(eventId);
