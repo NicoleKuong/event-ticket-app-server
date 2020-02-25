@@ -1,0 +1,57 @@
+const { Router } = require("express");
+const User = require("./model");
+const bcrypt = require("bcrypt");
+const { toJWT } = require("../auth/jwt");
+
+const router = new Router();
+
+//user signup
+router.post("/user", async (request, response) => {
+  if (!request.body.email || !request.body.password) {
+    return response
+      .status(400)
+      .send("Missing email or password in request body");
+  }
+
+  const hashedPassword = bcrypt.hashSync(request.body.password, 10);
+
+  try {
+    await User.create({
+      ...request.body,
+      password: hashedPassword
+    });
+
+    response.status(201).send("User created");
+  } catch (error) {
+    //user email address not unique
+    console.log(error.name);
+    switch (error.name) {
+      case "SequelizeUniqueConstraintError": //in-built sequelize error
+        return response.status(400).send({ message: "Email not unique" });
+
+      default:
+        return response.status(400).send("Bad request");
+    }
+  }
+});
+
+//user login
+router.post("/login", async (request, response) => {
+  console.log(request.body);
+
+  //user find whether email address exit or not
+  const user = await User.findOne({ where: { email: request.body.email } });
+
+  const passwordValid = bcrypt.compareSync(
+    request.body.password,
+    user.password
+  );
+
+  if (passwordValid) {
+    const token = toJWT({ id: user.id });
+
+    return response.status(200).send({ token: token });
+  }
+});
+
+module.exports = router;
