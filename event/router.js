@@ -31,7 +31,7 @@ router.get("/event", async (request, response, next) => {
   }
 });
 
-//
+//edit event
 router.put("/event/:id", async (request, response, next) => {
   try {
     const eventId = parseInt(request.params.id);
@@ -47,6 +47,7 @@ router.put("/event/:id", async (request, response, next) => {
   }
 });
 
+//delete event
 router.delete("/event/:id", async (request, response, next) => {
   try {
     const eventId = parseInt(request.params.id);

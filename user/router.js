@@ -7,6 +7,7 @@ const router = new Router();
 
 //user signup
 router.post("/user", async (request, response) => {
+  console.log("create user", request.body);
   if (!request.body.email || !request.body.password) {
     return response
       .status(400)
@@ -27,30 +28,11 @@ router.post("/user", async (request, response) => {
     console.log(error.name);
     switch (error.name) {
       case "SequelizeUniqueConstraintError": //in-built sequelize error
-        return response.status(400).send({ message: "Email not unique" });
+        return response.status(400).send({ message: error.errors[0].message });
 
       default:
         return response.status(400).send("Bad request");
     }
-  }
-});
-
-//user login
-router.post("/login", async (request, response) => {
-  console.log(request.body);
-
-  //user find whether email address exit or not
-  const user = await User.findOne({ where: { email: request.body.email } });
-
-  const passwordValid = bcrypt.compareSync(
-    request.body.password,
-    user.password
-  );
-
-  if (passwordValid) {
-    const token = toJWT({ id: user.id });
-
-    return response.status(200).send({ token: token });
   }
 });
 
