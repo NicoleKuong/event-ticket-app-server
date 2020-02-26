@@ -18,7 +18,7 @@ app.use(parserMiddleware);
 
 app.use(userRouter);
 app.use(authRouter);
-// app.use(ticketRouter);
+app.use(ticketRouter);
 app.use(eventRouter);
 
 app.get("/", (request, response, next) => {

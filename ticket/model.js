@@ -1,5 +1,7 @@
 const Sequelize = require("sequelize");
 const db = require("../db");
+const Event = require("../event/model");
+const User = require("../user/model");
 
 const Ticket = db.define("ticket", {
   imageUrl: {
@@ -14,5 +16,11 @@ const Ticket = db.define("ticket", {
     allowNull: false
   }
 });
+
+Ticket.belongsTo(User);
+User.hasMany(Ticket);
+
+Ticket.belongsTo(Event);
+Event.hasMany(Ticket);
 
 module.exports = Ticket;

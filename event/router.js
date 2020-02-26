@@ -21,7 +21,7 @@ router.get("/events", async (request, response, next) => {
   try {
     const limit = request.query.limit || 9;
     const offset = request.query.offset || 0;
-    console.log("current date", new Date());
+    // console.log("current date", new Date());
     const events = await Event.findAll({
       limit,
       offset,
