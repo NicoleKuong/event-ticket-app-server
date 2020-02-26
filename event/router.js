@@ -7,6 +7,7 @@ const router = new Router();
 //create event
 //need to add auth middleware
 router.post("/events", async (request, response, next) => {
+  console.log("create event", request.body);
   try {
     const newEvent = await Event.create(request.body);
     response.send(newEvent);
