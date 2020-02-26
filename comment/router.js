@@ -1,10 +1,12 @@
 const { Router } = require("express");
-const commnet = require("./model");
-const Sequelize = require("sequelize");
+const Comment = require("./model");
+
+const User = require("../user/model");
 
 const router = new Router();
 
 //create comment
+//add auth
 router.post("/comments", async (request, response, next) => {
   console.log("create comments", request.body);
   try {
@@ -20,7 +22,8 @@ router.get("/comments/:ticketId", async (request, response, next) => {
   console.log("REQUEST RECEIVED:", request.params.ticketId);
   try {
     const comments = await Comment.findAll({
-      where: { tickerId: request.params.ticketId }
+      where: { ticketId: request.params.ticketId },
+      include: [{ User }]
     });
     response.send(comments);
   } catch (error) {
