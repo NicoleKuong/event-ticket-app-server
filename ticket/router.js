@@ -59,4 +59,19 @@ router.get("/user/tickets/:ticketId", async (request, response, next) => {
   }
 });
 
+//edit the ticket
+//need auth
+
+router.put("/tickets/:ticketId/edit", async (request, response, next) => {
+  try {
+    const ticket = await Ticket.findByPk(request.params.ticketId);
+    if (ticket) {
+      ticket.update(request.body);
+    } else {
+      response.status(404).end();
+    }
+  } catch (error) {
+    next(error);
+  }
+});
 module.exports = router;
