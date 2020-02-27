@@ -1,6 +1,5 @@
 const { Router } = require("express");
 const Comment = require("./model");
-
 const User = require("../user/model");
 
 const router = new Router();
@@ -23,7 +22,11 @@ router.get("/tickets/:ticketId/comments", async (request, response, next) => {
   try {
     const comments = await Comment.findAll({
       where: { ticketId: request.params.ticketId },
-      include: [{ User }]
+      include: [
+        {
+          model: User
+        }
+      ]
     });
     response.send(comments);
   } catch (error) {

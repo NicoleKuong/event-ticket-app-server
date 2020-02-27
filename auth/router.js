@@ -29,7 +29,7 @@ router.post("/login", (request, response) => {
         }
         // 2. use bcrypt.compareSync to check the password against the stored hash
         else if (bcrypt.compareSync(request.body.password, entity.password)) {
-          console.log("entity info", entity);
+          // console.log("entity info", entity);
           // 3. if the password is correct, return a JWT with the userId of the user (user.id)
           response.send({
             jwt: toJWT({ userId: entity.id }),
