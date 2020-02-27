@@ -29,11 +29,12 @@ router.post("/login", (request, response) => {
         }
         // 2. use bcrypt.compareSync to check the password against the stored hash
         else if (bcrypt.compareSync(request.body.password, entity.password)) {
-          // console.log("entity", entity);
+          console.log("entity info", entity);
           // 3. if the password is correct, return a JWT with the userId of the user (user.id)
           response.send({
             jwt: toJWT({ userId: entity.id }),
-            userId: entity.id
+            userId: entity.id,
+            username: entity.username
           });
         } else {
           response.status(400).send({
@@ -51,9 +52,9 @@ router.post("/login", (request, response) => {
 });
 
 // to test: http :4000/secret-endpoint "Authorization":"Bearer <jwt-token>"
-router.get("/secret-endpoint", auth, (req, res) => {
-  res.send({
-    message: `Thanks for visiting the secret endpoint ${req.user.email}.`
-  });
-});
+// router.get("/secret-endpoint", auth, (req, res) => {
+//   res.send({
+//     message: `Thanks for visiting the secret endpoint ${req.user.email}.`
+//   });
+// });
 module.exports = router;

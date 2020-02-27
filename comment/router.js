@@ -18,7 +18,7 @@ router.post("/comments", async (request, response, next) => {
 });
 
 //get comments of a ticket
-router.get("/comments/:ticketId", async (request, response, next) => {
+router.get("/tickets/:ticketId/comments", async (request, response, next) => {
   console.log("REQUEST RECEIVED:", request.params.ticketId);
   try {
     const comments = await Comment.findAll({

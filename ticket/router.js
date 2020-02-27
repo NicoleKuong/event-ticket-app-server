@@ -2,6 +2,7 @@ const { Router } = require("express");
 const Sequelize = require("sequelize");
 const Ticket = require("./model");
 // const auth = require("../auth/middleware");
+// const User = require("../user/model");
 
 const router = new Router();
 
@@ -23,6 +24,7 @@ router.get("/events/:eventId/tickets", async (request, response, next) => {
   try {
     const tickets = await Ticket.findAll({
       where: { eventId: request.params.eventId }
+      // include: [User]
     });
     response.send(tickets);
   } catch (error) {
