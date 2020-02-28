@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const Sequelize = require("sequelize");
 const Ticket = require("./model");
-// const auth = require("../auth/middleware");
+const auth = require("../auth/middleware");
 const User = require("../user/model");
 const Comment = require("../comment/model");
 
@@ -9,7 +9,7 @@ const router = new Router();
 
 //create ticket
 //need to add auth middleware
-router.post("/tickets", async (request, response, next) => {
+router.post("/tickets", auth, async (request, response, next) => {
   // console.log("create tickets", request.body);
   try {
     const newTicket = await Ticket.create(request.body);
@@ -39,7 +39,7 @@ router.get("/events/:eventId/tickets", async (request, response, next) => {
       where: { eventId: request.params.eventId },
       include: [{ model: User }]
     });
-    console.log("including", tickets);
+    // console.log("including", tickets);
     response.send(tickets);
     // console.log("including user", response.body);
   } catch (error) {
@@ -62,11 +62,12 @@ router.get("/user/tickets/:ticketId", async (request, response, next) => {
 //edit the ticket
 //need auth
 
-router.put("/tickets/:ticketId/edit", async (request, response, next) => {
+router.put("/ticket/:ticketId/edit", auth, async (request, response, next) => {
   try {
     const ticket = await Ticket.findByPk(request.params.ticketId);
     if (ticket) {
-      ticket.update(request.body);
+      const updatedTicket = await ticket.update(request.body);
+      response.send(updatedTicket);
     } else {
       response.status(404).end();
     }
