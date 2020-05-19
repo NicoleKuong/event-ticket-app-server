@@ -10,7 +10,7 @@ const router = new Router();
 //create ticket
 //need to add auth middleware
 router.post("/tickets", auth, async (request, response, next) => {
-  // console.log("create tickets", request.body);
+  // console.log("create tickets!!!!!!!!!", request.body);
   try {
     const newTicket = await Ticket.create(request.body);
     response.send(newTicket);
@@ -23,7 +23,7 @@ router.post("/tickets", auth, async (request, response, next) => {
 router.get("/tickets", async (request, response, next) => {
   try {
     const tickets = await Ticket.findAll({
-      include: [{ model: User }, { model: Comment }]
+      include: [{ model: User }, { model: Comment }],
     });
     response.send(tickets);
   } catch (error) {
@@ -37,7 +37,7 @@ router.get("/events/:eventId/tickets", async (request, response, next) => {
   try {
     const tickets = await Ticket.findAll({
       where: { eventId: request.params.eventId },
-      include: [{ model: User }]
+      include: [{ model: User, attributes: ["username"] }],
     });
     // console.log("including", tickets);
     response.send(tickets);
@@ -64,6 +64,7 @@ router.get("/user/tickets/:ticketId", async (request, response, next) => {
 
 router.put("/ticket/:ticketId/edit", auth, async (request, response, next) => {
   try {
+    console.log("=======================", { body: request.body });
     const ticket = await Ticket.findByPk(request.params.ticketId);
     if (ticket) {
       const updatedTicket = await ticket.update(request.body);
