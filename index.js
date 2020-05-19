@@ -27,5 +27,5 @@ app.get("/", (request, response, next) => {
   response.send("hello world");
 });
 
-console.log("port", process.env.PORT);
+// console.log("port", process.env.PORT);
 app.listen(port, () => console.log(`Listening on port ${port}`));
