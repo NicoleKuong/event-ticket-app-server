@@ -8,7 +8,7 @@ const router = new Router();
 //create event
 //need to add auth middleware
 router.post("/events", auth, async (request, response, next) => {
-  console.log("create event", request.body);
+  console.log("create event????????????", request.body);
   try {
     const newEvent = await Event.create(request.body);
     response.send(newEvent);
@@ -26,7 +26,7 @@ router.get("/events", async (request, response, next) => {
     const events = await Event.findAll({
       limit,
       offset,
-      where: { endDate: { [Sequelize.Op.gte]: new Date() } }
+      where: { endDate: { [Sequelize.Op.gte]: new Date() } },
     });
     response.send(events);
   } catch (error) {
